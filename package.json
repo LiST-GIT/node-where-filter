@@ -1,0 +1,30 @@
+{
+  "name": "node-where-filter",
+  "version": "1.0.0",
+  "description": "通过字符串生成查询条件语句",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LiST-GIT/node-where-filter.git"
+  },
+  "dependencies": {
+    "node-dot-path": "latest"
+  },
+  "keywords": [
+    "array",
+    "object",
+    "filter",
+    "where",
+    "sql",
+    "string"
+  ],
+  "author": "LiST",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LiST-GIT/node-where-filter/issues"
+  },
+  "homepage": "https://github.com/LiST-GIT/node-where-filter"
+}
