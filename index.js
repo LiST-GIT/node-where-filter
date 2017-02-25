@@ -95,7 +95,7 @@ const tokenizer = function( content ) {
 	return words;
 };
 
-const nodeToExpr = function( node, aliases ) {
+const nodeToExpr = function( node ) {
 	switch ( node.type ) {
 	case 'expr':
 		return [ node.operator, nodeToExpr( node.left ), nodeToExpr( node.right ) ];
