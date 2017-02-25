@@ -9,7 +9,7 @@ npm install node-where-filter
 ```javascript
 const wherefilter = require( 'node-where-filter' );
 
-var exprTree = wherefilter.makeTree( 'name=Jack && age>10' );
+var exprTree = wherefilter.makeTree( 'name=Jack && age>10 && alias<10', { alias: 'other name' } );
 console.log( exprTree );
 // echo: [ '&&', [ '=', 'name', 'Jack' ], [ '>', 'age', 10 ] ]
 

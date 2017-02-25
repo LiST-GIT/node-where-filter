@@ -95,7 +95,7 @@ const tokenizer = function( content ) {
 	return words;
 };
 
-const nodeToExpr = function( node ) {
+const nodeToExpr = function( node, aliases ) {
 	switch ( node.type ) {
 	case 'expr':
 		return [ node.operator, nodeToExpr( node.left ), nodeToExpr( node.right ) ];
@@ -168,7 +168,7 @@ const exprToSQL = function( expr ) {
 };
 
 module.exports = {
-	makeTree: function( where ) {
+	makeTree: function( where, aliases ) {
 		var nodes = tokenizer( where );
 		var priority = [];
 		nodes.forEach( ( node, index ) => {
@@ -177,6 +177,7 @@ module.exports = {
 			node.type === 'operator' && priority.push( node );
 		} );
 		priority.sort( ( mon, sun ) => sun.priority - mon.priority );
+		aliases = aliases || {};
 		var node = priority.map( ( node ) => {
 			switch ( node.operator ) {
 			case '&&': case '||':
@@ -206,6 +207,7 @@ module.exports = {
 						previous: node.previous.previous,
 						next: node.next.next,
 					};
+					expr.left.value = aliases[ expr.left.value ] || expr.left.value;
 					expr.previous && ( expr.previous.next = expr );
 					expr.next && ( expr.next.previous = expr );
 					return expr;
