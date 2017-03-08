@@ -102,10 +102,10 @@ const nodeToExpr = function( node ) {
 	case 'literal':
 		if ( node.operator === '"' ) {
 			return node.value.replace( /(\\[bfnrt\\'"]|\\u[0-f]{4})/ig, ( escape ) => JSON.parse( '"' + escape + '"' ) );
-		} else if ( Number.isNaN( Number.parseFloat( node.value ) ) ) {
-			return node.value;
-		} else {
+		} else if ( Number.parseFloat( node.value ) == node.value ) {
 			return Number.parseFloat( node.value );
+		} else {
+			return node.value;
 		}
 	default:
 		throw new SyntaxError();
