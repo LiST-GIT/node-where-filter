@@ -121,28 +121,28 @@ const exprCompile = function( expr ) {
 		return [ expr[ 0 ], dot.makePathArray( expr[ 1 ] ), expr[ 2 ] ];
 	}
 };
-const exprExecute = function( expr, data ) {
+const exprExecute = function( expr, data, exec ) {
 	switch ( expr[ 0 ] ) {
 	case '&&':
 		return exprExecute( expr[ 1 ], data ) && exprExecute( expr[ 2 ], data );
 	case '||':
 		return exprExecute( expr[ 1 ], data ) || exprExecute( expr[ 2 ], data );
 	case '~':
-		return expr[ 2 ].test( dot.get( data, expr[ 1 ] ) );
+		return expr[ 2 ].test( dot.get( data, expr[ 1 ], exec ) );
 	case '!~':
-		return expr[ 2 ].test( dot.get( data, expr[ 1 ] ) ) === false;
+		return expr[ 2 ].test( dot.get( data, expr[ 1 ], exec ) ) === false;
 	case '=':
-		return dot.get( data, expr[ 1 ] ) == expr[ 2 ];
+		return dot.get( data, expr[ 1 ], exec ) == expr[ 2 ];
 	case '!=':
-		return dot.get( data, expr[ 1 ] ) != expr[ 2 ];
+		return dot.get( data, expr[ 1 ], exec ) != expr[ 2 ];
 	case '<':
-		return dot.get( data, expr[ 1 ] ) < expr[ 2 ];
+		return dot.get( data, expr[ 1 ], exec ) < expr[ 2 ];
 	case '>':
-		return dot.get( data, expr[ 1 ] ) > expr[ 2 ];
+		return dot.get( data, expr[ 1 ], exec ) > expr[ 2 ];
 	case '<=':
-		return dot.get( data, expr[ 1 ] ) <= expr[ 2 ];
+		return dot.get( data, expr[ 1 ], exec ) <= expr[ 2 ];
 	case '>=':
-		return dot.get( data, expr[ 1 ] ) >= expr[ 2 ];
+		return dot.get( data, expr[ 1 ], exec ) >= expr[ 2 ];
 	}
 };
 const escape = function( value ) {
@@ -218,9 +218,9 @@ module.exports = {
 		} ).pop();
 		return nodeToExpr( node );
 	},
-	where: function( where ) {
+	where: function( where, exec ) {
 		where = exprCompile( where );
-		return ( data ) => exprExecute( where, data );
+		return ( data ) => exprExecute( where, data, exec );
 	},
 	whereSQL: function( where ) {
 		return exprToSQL( where );
