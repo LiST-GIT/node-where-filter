@@ -119,6 +119,8 @@ const exprCompile = function( expr ) {
 		return [ expr[ 0 ], dot.makePathArray( expr[ 1 ] ), new RegExp( expr[ 2 ] ) ];
 	case '=': case '!=': case '<': case '>': case '<=': case '>=':
 		return [ expr[ 0 ], dot.makePathArray( expr[ 1 ] ), expr[ 2 ] ];
+	case true:
+		return expr;
 	}
 };
 const exprExecute = function( expr, data, exec ) {
@@ -143,6 +145,8 @@ const exprExecute = function( expr, data, exec ) {
 		return dot.get( data, expr[ 1 ], exec ) <= expr[ 2 ];
 	case '>=':
 		return dot.get( data, expr[ 1 ], exec ) >= expr[ 2 ];
+	case true:
+		return true;
 	}
 };
 const escape = function( value ) {
@@ -164,11 +168,14 @@ const exprToSQL = function( expr ) {
 		return '`' + expr[ 1 ] + '` NOT LIKE ' + escape( expr[ 2 ] );
 	case '=': case '!=': case '<': case '>': case '<=': case '>=':
 		return '`' + expr[ 1 ] + '` ' + expr[ 0 ] + ' ' + escape( expr[ 2 ] );
+	case true:
+		return '1 = 1';
 	}
 };
 
 module.exports = {
 	makeTree: function( where, aliases ) {
+		typeof where !== 'string' && ( where = '' );
 		var nodes = tokenizer( where );
 		var priority = [];
 		nodes.forEach( ( node, index ) => {
@@ -216,7 +223,7 @@ module.exports = {
 			}
 			throw new SyntaxError();
 		} ).pop();
-		return nodeToExpr( node );
+		return node ? nodeToExpr( node ) : [ true ];
 	},
 	where: function( where, exec ) {
 		where = exprCompile( where );
