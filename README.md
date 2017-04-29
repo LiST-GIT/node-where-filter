@@ -1,11 +1,14 @@
-##通过字符串生成查询条件语句
 
-###安装
+## 通过字符串生成查询条件语句
+
+### 安装
+
 ```
 npm install node-where-filter
 ```
 
-###示例
+### 示例
+
 ```javascript
 const wherefilter = require( 'node-where-filter' );
 
@@ -26,7 +29,8 @@ console.log( wherefilter.whereSQL( exprTree ) );
 // echo: ( `name` = "Jack" ) AND ( `age` > 10 )
 ```
 
-###特别说明
+### 特别说明
+
 ```
 字符串: "aaa\"bbb"
 
