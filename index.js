@@ -126,9 +126,9 @@ const exprCompile = function( expr ) {
 const exprExecute = function( expr, data, exec ) {
 	switch ( expr[ 0 ] ) {
 	case '&&':
-		return exprExecute( expr[ 1 ], data ) && exprExecute( expr[ 2 ], data );
+		return exprExecute( expr[ 1 ], data, exec ) && exprExecute( expr[ 2 ], data, exec );
 	case '||':
-		return exprExecute( expr[ 1 ], data ) || exprExecute( expr[ 2 ], data );
+		return exprExecute( expr[ 1 ], data, exec ) || exprExecute( expr[ 2 ], data, exec );
 	case '~':
 		return expr[ 2 ].test( dot.get( data, expr[ 1 ], exec ) );
 	case '!~':
