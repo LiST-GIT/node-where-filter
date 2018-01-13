@@ -12,21 +12,23 @@ npm install node-where-filter
 ```javascript
 const wherefilter = require( 'node-where-filter' );
 
-var exprTree = wherefilter.makeTree( 'name=Jack && age>10 && alias<10', { alias: 'other name' } );
+var exprTree = wherefilter.makeTree( '(name~Jack || name="Mike A") && age>10 && alias<10', { alias: 'other name' } );
 console.log( exprTree );
-// echo: [ '&&', [ '=', 'name', 'Jack' ], [ '>', 'age', 10 ] ]
+// echo: [ '&&', [ '&&', [ '||', [Array], [Array] ], [ '>', 'age', 10 ] ], [ '<', 'other name', 10 ] ]
 
 var dataTable = [
-	{ name: 'Jack', age: 20 },
-	{ name: 'Jack', age: 29 },
-	{ name: 'Mike', age: 20 },
-	{ name: 'Jack', age: 9 },
+	{ name: 'Jack A', age: 20, 'other name': 6 },
+	{ name: 'Jack B', age: 29, 'other name': 11 },
+	{ name: 'Mike A', age: 20, 'other name': 6 },
+	{ name: 'Jack',   age: 9 , 'other name': 6 },
 ];
 console.log( dataTable.filter( wherefilter.where( exprTree ) ) );
-// echo: [ { name: 'Jack', age: 20 }, { name: 'Jack', age: 29 } ]
+// echo: [ { name: 'Jack A', age: 20, 'other name': 6 },
+//         { name: 'Mike A', age: 20, 'other name': 6 } ]
 
 console.log( wherefilter.whereSQL( exprTree ) );
-// echo: ( `name` = "Jack" ) AND ( `age` > 10 )
+// echo: ( ( ( `name` LIKE "%Jack%" ) OR ( `name` = "Mike A" ) ) AND ( `age` > 10 ) ) AND ( `other name` < 10 )
+
 ```
 
 ### 特别说明

@@ -102,7 +102,7 @@ const nodeToExpr = function( node ) {
 	case 'literal':
 		if ( node.operator === '"' ) {
 			return node.value.replace( /(\\[bfnrt\\'"]|\\u[0-f]{4})/ig, ( escape ) => JSON.parse( '"' + escape + '"' ) );
-		} else if ( Number.parseFloat( node.value ) == node.value ) {
+		} else if ( Number.parseFloat( node.value ).toString() == node.value ) {
 			return Number.parseFloat( node.value );
 		} else {
 			return node.value;
@@ -163,9 +163,9 @@ const exprToSQL = function( expr ) {
 	case '||':
 		return '( ' + exprToSQL( expr[ 1 ] ) + ' ) OR ( ' + exprToSQL( expr[ 2 ] ) + ' )';
 	case '~':
-		return '`' + expr[ 1 ] + '` LIKE ' + escape( expr[ 2 ] );
+		return '`' + expr[ 1 ] + '` LIKE ' + escape( '%' + expr[ 2 ] + '%' );
 	case '!~':
-		return '`' + expr[ 1 ] + '` NOT LIKE ' + escape( expr[ 2 ] );
+		return '`' + expr[ 1 ] + '` NOT LIKE ' + escape( '%' + expr[ 2 ] + '%' );
 	case '=': case '!=': case '<': case '>': case '<=': case '>=':
 		return '`' + expr[ 1 ] + '` ' + expr[ 0 ] + ' ' + escape( expr[ 2 ] );
 	case true:
